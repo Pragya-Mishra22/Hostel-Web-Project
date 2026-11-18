@@ -103,9 +103,9 @@ export default async function SafetyPage() {
               </div>
               <ul className="mt-5 space-y-3">
                 {group.contacts.map((c) => (
-                  <li key={c.label} className="flex items-center justify-between gap-3">
+                  <li key={c.label} className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-ink">{c.label}</p>
+                      <p className="text-sm font-medium leading-snug text-ink">{c.label}</p>
                       {c.note ? <p className="text-xs text-ink-muted">{c.note}</p> : null}
                     </div>
                     <a

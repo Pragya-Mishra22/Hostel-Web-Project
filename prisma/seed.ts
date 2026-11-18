@@ -148,14 +148,6 @@ async function main() {
   }
 
   console.log("Creating students...");
-  const allBeds = await db.bed.findMany({ include: { room: true } });
-  const bedsByHostel = new Map<string, typeof allBeds>();
-  for (const bed of allBeds) {
-    const list = bedsByHostel.get(bed.room.hostelId) ?? [];
-    list.push(bed);
-    bedsByHostel.set(bed.room.hostelId, list);
-  }
-
   const totalStudents = 28;
   const students: { id: string; hostelId: string | null }[] = [];
 
@@ -202,16 +194,12 @@ async function main() {
 
     // Allocate a bed to roughly 70% of approved students, leaving real vacancy.
     if (admissionStatus === AdmissionStatus.APPROVED && i % 10 < 7) {
-      const available = (bedsByHostel.get(hostel.id) ?? []).filter((b) => true);
-      const bed = available.find((b) => true);
-      // Find a still-unassigned bed for this hostel.
       const freeBed = await db.bed.findFirst({
         where: { room: { hostelId: hostel.id }, studentId: null },
       });
       if (freeBed) {
         await db.bed.update({ where: { id: freeBed.id }, data: { studentId: student.id } });
       }
-      void bed;
     }
 
     if (admissionStatus !== AdmissionStatus.APPROVED) continue;
@@ -259,11 +247,18 @@ async function main() {
       },
     });
 
-    // Complaints: about a third of students have raised one.
+    // Complaints: about a third of students have raised one, with a mix of
+    // statuses. Only approved students reach this point (the `continue`
+    // above), and admission status is PENDING exactly when i % 9 === 0 —
+    // which, since 9 is a multiple of 3, always lines up with the same
+    // phase of any (i / 3) % 3 cycle. The "+ 1" shift below avoids that
+    // coincidence so OPEN complaints actually show up in the demo data.
     if (i % 3 === 0) {
       const categories = Object.values(ComplaintCategory);
       const category = categories[i % categories.length];
-      const status = i % 3 === 0 ? ComplaintStatus.RESOLVED : i % 3 === 1 ? ComplaintStatus.OPEN : ComplaintStatus.IN_PROGRESS;
+      const statusCycle = (i / 3 + 1) % 3;
+      const status =
+        statusCycle === 0 ? ComplaintStatus.OPEN : statusCycle === 1 ? ComplaintStatus.IN_PROGRESS : ComplaintStatus.RESOLVED;
       await db.complaint.create({
         data: {
           studentId: student.id,
@@ -322,7 +317,7 @@ async function main() {
   console.log("\nDemo logins (password for all: Hostel@123):");
   console.log("  Chief warden:  chiefwarden@ymcahostels.demo");
   for (const h of HOSTELS) console.log(`  Warden (${h.code}):  warden.${h.code.toLowerCase()}@ymcahostels.demo`);
-  console.log("  Any seeded student email also works, e.g. anjali.sharma0@ymcahostels.demo");
+  console.log("  Any APPROVED seeded student's email also works (see the Students list in /admin after logging in as staff).");
 }
 
 function complaintTitleFor(category: ComplaintCategory) {

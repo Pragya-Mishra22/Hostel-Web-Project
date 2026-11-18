@@ -70,7 +70,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[var(--color-line)] py-5">
+      <div className="border-t border-[var(--color-line)] py-5 pb-28">
         <p className="mx-auto max-w-7xl px-4 text-center text-xs text-ink-muted md:px-6">
           &copy; {year} J C Bose University of Science &amp; Technology, YMCA, Faridabad. Hostel portal
           built for demonstration purposes.
