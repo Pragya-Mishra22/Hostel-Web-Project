@@ -1,0 +1,135 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+@theme {
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Institutional navy + warm gold identity */
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-200: #b8d0ff;
+  --color-brand-300: #8bb0ff;
+  --color-brand-400: #5a87ff;
+  --color-brand-500: #335fe8;
+  --color-brand-600: #2142c4;
+  --color-brand-700: #1d33a0;
+  --color-brand-800: #182a7e;
+  --color-brand-900: #131f5c;
+  --color-brand-950: #0c1440;
+
+  --color-gold-50: #fffaeb;
+  --color-gold-100: #fef0c7;
+  --color-gold-200: #fde08a;
+  --color-gold-300: #fccb4d;
+  --color-gold-400: #fbb823;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d87c06;
+  --color-gold-700: #b45a09;
+  --color-gold-800: #92460e;
+  --color-gold-900: #783a0f;
+
+  --color-success-500: #16a34a;
+  --color-success-600: #15803d;
+  --color-warning-500: #d97706;
+  --color-warning-600: #b45309;
+  --color-danger-500: #dc2626;
+  --color-danger-600: #b91c1c;
+
+  /* Semantic surface/text tokens — reassigned per-theme below, outside
+     @theme, so every bg-surface / text-ink / border-line utility updates
+     automatically without needing a `dark:` variant on each usage. */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f8fc;
+  --color-ink: #0f1629;
+  --color-ink-muted: #51607a;
+  --color-line: #e3e8f2;
+  --color-ring: var(--color-brand-500);
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --color-surface: #0b1020;
+    --color-surface-muted: #10172a;
+    --color-ink: #eef2fb;
+    --color-ink-muted: #9aa7c2;
+    --color-line: #202a45;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-surface: #0b1020;
+  --color-surface-muted: #10172a;
+  --color-ink: #eef2fb;
+  --color-ink-muted: #9aa7c2;
+  --color-line: #202a45;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-brand-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print stylesheet for the gate pass and fee receipt */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

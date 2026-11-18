@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CHIEF_WARDEN
+  WARDEN
+  STUDENT
+}
+
+enum AdmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum FeeType {
+  MESS
+  HOSTEL
+  ELECTRICITY
+}
+
+enum FeeStatus {
+  PAID
+  PENDING
+}
+
+enum ComplaintCategory {
+  ELECTRICAL
+  PLUMBING
+  WIFI
+  CLEANLINESS
+  MESS
+  OTHER
+}
+
+enum ComplaintStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MovementType {
+  DEPARTURE
+  RETURN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  role         Role
+  createdAt    DateTime @default(now())
+
+  hostelId String?
+  hostel   Hostel? @relation("WardenHostel", fields: [hostelId], references: [id])
+
+  student Student?
+
+  decidedLeaves       LeaveApplication[] @relation("DecidedBy")
+  recordedFees        FeeRecord[]        @relation("RecordedBy")
+  recordedMovements   MovementLog[]      @relation("RecordedBy")
+}
+
+model Hostel {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  code        String  @unique
+  address     String
+  description String
+  imageUrl    String?
+  wardenName  String?
+  wardenPhone String?
+
+  wardens  User[]      @relation("WardenHostel")
+  rooms    Room[]
+  students Student[]
+  complaints Complaint[]
+  leaves   LeaveApplication[]
+}
+
+model Room {
+  id         String @id @default(cuid())
+  hostelId   String
+  hostel     Hostel @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+  roomNumber String
+  floor      Int
+  capacity   Int
+
+  beds Bed[]
+
+  @@unique([hostelId, roomNumber])
+}
+
+model Bed {
+  id        String  @id @default(cuid())
+  roomId    String
+  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  bedNumber Int
+  studentId String? @unique
+  student   Student? @relation(fields: [studentId], references: [id])
+
+  @@unique([roomId, bedNumber])
+}
+
+model Student {
+  id              String          @id @default(cuid())
+  userId          String          @unique
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rollNumber      String          @unique
+  course          String
+  year            Int
+  phone           String
+  guardianName    String
+  guardianPhone   String
+  address         String
+  admissionStatus AdmissionStatus @default(PENDING)
+  photoUrl        String?
+  createdAt       DateTime        @default(now())
+
+  hostelId String?
+  hostel   Hostel? @relation(fields: [hostelId], references: [id])
+
+  bed Bed?
+
+  feeRecords   FeeRecord[]
+  complaints   Complaint[]
+  leaves       LeaveApplication[]
+  movementLogs MovementLog[]
+}
+
+model FeeRecord {
+  id             String    @id @default(cuid())
+  studentId      String
+  student        Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  type           FeeType
+  periodLabel    String
+  amount         Int
+  status         FeeStatus @default(PENDING)
+  paidAt         DateTime?
+  receiptNo      String?   @unique
+  recordedByUserId String?
+  recordedBy     User?     @relation("RecordedBy", fields: [recordedByUserId], references: [id])
+  createdAt      DateTime  @default(now())
+
+  @@unique([studentId, type, periodLabel])
+}
+
+model Complaint {
+  id          String            @id @default(cuid())
+  studentId   String
+  student     Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  hostelId    String
+  hostel      Hostel            @relation(fields: [hostelId], references: [id])
+  category    ComplaintCategory
+  title       String
+  description String
+  status      ComplaintStatus   @default(OPEN)
+  remarks     String?
+  createdAt   DateTime          @default(now())
+  resolvedAt  DateTime?
+}
+
+model LeaveApplication {
+  id              String      @id @default(cuid())
+  studentId       String
+  student         Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  hostelId        String
+  hostel          Hostel      @relation(fields: [hostelId], references: [id])
+  fromDate        DateTime
+  toDate          DateTime
+  reason          String
+  destination     String
+  status          LeaveStatus @default(PENDING)
+  appliedAt       DateTime    @default(now())
+  decidedAt       DateTime?
+  decidedByUserId String?
+  decidedBy       User?       @relation("DecidedBy", fields: [decidedByUserId], references: [id])
+  wardenRemarks   String?
+
+  movementLogs MovementLog[]
+}
+
+model MovementLog {
+  id              String       @id @default(cuid())
+  studentId       String
+  student         Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  leaveId         String?
+  leave           LeaveApplication? @relation(fields: [leaveId], references: [id])
+  type            MovementType
+  timestamp       DateTime     @default(now())
+  recordedByUserId String?
+  recordedBy      User?        @relation("RecordedBy", fields: [recordedByUserId], references: [id])
+}
