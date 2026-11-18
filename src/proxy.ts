@@ -19,7 +19,7 @@ async function readRole(request: NextRequest): Promise<string | null> {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const role = await readRole(request);
 
