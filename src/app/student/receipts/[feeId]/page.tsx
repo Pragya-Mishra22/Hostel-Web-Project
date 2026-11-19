@@ -28,8 +28,8 @@ export default async function ReceiptPage({ params }: { params: Promise<{ feeId:
         <PrintButton />
       </div>
 
-      <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-8 print:rounded-none print:border-0 print:p-0">
-        <div className="flex items-center gap-3 border-b border-[var(--color-line)] pb-5">
+      <div className="rounded-2xl border border-line bg-card p-8 print:rounded-none print:border-0 print:p-0">
+        <div className="flex items-center gap-3 border-b border-line pb-5">
           <span className="flex size-10 items-center justify-center rounded-lg bg-brand-600 text-white">
             <Building2 className="size-5" aria-hidden="true" />
           </span>

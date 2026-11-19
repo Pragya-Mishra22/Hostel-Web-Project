@@ -37,7 +37,7 @@ export default async function StudentDashboardPage() {
       </div>
 
       {student.admissionStatus === "PENDING" ? (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-50 px-5 py-4 text-sm text-warning-600 dark:bg-amber-950/20">
+        <div className="rounded-2xl border border-warning-500/30 bg-warning-soft px-5 py-4 text-sm text-warning-fg">
           Your admission is still pending warden approval. Some features unlock once you&apos;re approved.
         </div>
       ) : null}
@@ -72,9 +72,9 @@ export default async function StudentDashboardPage() {
       </div>
 
       {latestLeave?.status === "APPROVED" ? (
-        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-success-500/30 bg-green-50 p-5 sm:flex-row sm:items-center dark:bg-green-950/20">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-success-500/30 bg-success-soft p-5 sm:flex-row sm:items-center">
           <div className="flex items-start gap-3">
-            <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-success-600" aria-hidden="true" />
+            <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-success-fg" aria-hidden="true" />
             <div>
               <p className="text-sm font-semibold text-ink">You have an approved gate pass</p>
               <p className="text-sm text-ink-muted">Show it at the gate when you leave or return.</p>
@@ -82,7 +82,7 @@ export default async function StudentDashboardPage() {
           </div>
           <Link
             href="/student/leave"
-            className="shrink-0 rounded-lg bg-success-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+            className="shrink-0 rounded-lg bg-success-600 px-4 py-2 text-sm font-semibold text-white hover:bg-success-600"
           >
             View gate pass
           </Link>
@@ -90,10 +90,10 @@ export default async function StudentDashboardPage() {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-6">
+        <div className="rounded-2xl border border-line bg-card p-6">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-bold text-ink">Fee dues</h2>
-            <LineHoverLink href="/student/fees" className="flex items-center gap-1 text-sm font-medium text-brand-700">
+            <LineHoverLink href="/student/fees" className="flex items-center gap-1 text-sm font-medium text-accent-fg">
               View all <ArrowRight className="size-3.5" aria-hidden="true" />
             </LineHoverLink>
           </div>
@@ -113,10 +113,10 @@ export default async function StudentDashboardPage() {
           )}
         </div>
 
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-6">
+        <div className="rounded-2xl border border-line bg-card p-6">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-bold text-ink">Recent leave status</h2>
-            <LineHoverLink href="/student/leave" className="flex items-center gap-1 text-sm font-medium text-brand-700">
+            <LineHoverLink href="/student/leave" className="flex items-center gap-1 text-sm font-medium text-accent-fg">
               Apply / view <ArrowRight className="size-3.5" aria-hidden="true" />
             </LineHoverLink>
           </div>

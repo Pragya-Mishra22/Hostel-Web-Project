@@ -33,7 +33,7 @@ export default async function AdmissionsPage() {
           {pending.map((student) => (
             <li
               key={student.id}
-              className="flex flex-col gap-4 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-4 rounded-xl border border-line bg-card p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
                 <p className="font-semibold text-ink">{student.user.name}</p>

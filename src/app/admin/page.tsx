@@ -75,30 +75,28 @@ export default async function AdminDashboardPage() {
         <p className="mt-1 text-sm text-ink-muted">A snapshot of today across admissions, rooms, fees and leave.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <StatCard label="Pending admissions" value={pendingAdmissions} icon={ClipboardCheck} tone={pendingAdmissions > 0 ? "warning" : "success"} />
         <StatCard label="Beds occupied" value={`${totalOccupied} / ${totalBeds}`} icon={BedDouble} tone="brand" />
         <StatCard label="Leaves awaiting decision" value={pendingLeaves} icon={CalendarClock} tone={pendingLeaves > 0 ? "warning" : "success"} />
-        <div className="grid grid-cols-2 gap-4">
-          <StatCard label="Departed today" value={departuresToday} icon={LogOut} tone="warning" />
-          <StatCard label="Returned today" value={returnsToday} icon={LogInIcon} tone="success" />
-        </div>
+        <StatCard label="Departed today" value={departuresToday} icon={LogOut} tone="warning" />
+        <StatCard label="Returned today" value={returnsToday} icon={LogInIcon} tone="success" />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="rounded-2xl border border-line bg-card p-5">
           <h2 className="font-display text-base font-bold text-ink">Room occupancy</h2>
           <OccupancyChart data={occupancyChartData} />
         </div>
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+        <div className="rounded-2xl border border-line bg-card p-5">
           <h2 className="font-display text-base font-bold text-ink">Complaints by status</h2>
           <ComplaintsChart data={complaintsChartData} />
         </div>
-      </div>
 
-      <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
-        <h2 className="font-display text-base font-bold text-ink">Fee collection vs pending (Rs)</h2>
-        <FeesChart data={feesChartData} />
+        <div className="rounded-2xl border border-line bg-card p-5">
+          <h2 className="font-display text-base font-bold text-ink">Fee collection vs pending (Rs)</h2>
+          <FeesChart data={feesChartData} />
+        </div>
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export default async function StudentFeesPage() {
             Mess fee (monthly), hostel fee (yearly) and electricity & cooler billing (monthly).
           </p>
         </div>
-        <div className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] px-4 py-2.5 text-right">
+        <div className="rounded-xl border border-line bg-card px-4 py-2.5 text-right">
           <p className="text-xs font-medium text-ink-muted">Total due</p>
           <p className="font-mono text-lg font-bold text-ink">{formatINR(totalDue)}</p>
         </div>
@@ -44,7 +44,7 @@ export default async function StudentFeesPage() {
       {fees.length === 0 ? (
         <EmptyState icon={Wallet} title="No fee records yet" description="Your warden's office will add fee records once your admission is confirmed." />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[var(--color-line)]">
+        <div className="overflow-hidden rounded-2xl border border-line">
           <table className="w-full text-sm">
             <thead className="bg-surface-muted text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
               <tr>
@@ -55,7 +55,7 @@ export default async function StudentFeesPage() {
                 <th className="px-4 py-3 text-right">Receipt</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-line)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-line bg-card">
               {fees.map((fee) => (
                 <tr key={fee.id}>
                   <td className="px-4 py-3 font-medium text-ink">{TYPE_LABEL[fee.type]}</td>
@@ -68,7 +68,7 @@ export default async function StudentFeesPage() {
                     {fee.status === "PAID" ? (
                       <Link
                         href={`/student/receipts/${fee.id}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 hover:underline"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-fg hover:underline"
                       >
                         <Receipt className="size-3.5" aria-hidden="true" /> View
                       </Link>

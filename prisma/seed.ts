@@ -17,7 +17,7 @@ const HOSTELS = [
     name: "Kasturba Hall",
     address: "Kasturba Hall, JC Bose University of Science & Technology, Sector 6, Faridabad",
     description:
-      "One of the university's oldest girls' hostels, known for its courtyard morning yoga sessions and its central location near the main academic block.",
+      "A girls' hostel block on campus. Residents use the mess, reading room, gym and Wi-Fi described on the university's hostel pages.",
     imageUrl: "/images/hostels/kasturba.jpg",
     wardenName: "Dr. Sunita Rawat",
     wardenPhone: "9810000101",
@@ -27,7 +27,7 @@ const HOSTELS = [
     name: "Mother Teresa Hostel",
     address: "Mother Teresa Hostel, JC Bose University of Science & Technology, Sector 6, Faridabad",
     description:
-      "A quieter hostel popular with senior students, with a reading room that stays open late during exam season.",
+      "A girls' hostel block on campus. Residents use the mess, reading room, common room and Wi-Fi described on the university's hostel pages.",
     imageUrl: null,
     wardenName: "Prof. Kavita Yadav",
     wardenPhone: "9810000102",
@@ -37,7 +37,7 @@ const HOSTELS = [
     name: "Kalpana Chawla Hostel",
     address: "Kalpana Chawla Hostel, JC Bose University of Science & Technology, Sector 6, Faridabad",
     description:
-      "Named after the astronaut and alumna icon, this hostel houses many first-year engineering students and sits closest to the sports ground.",
+      "A girls' hostel block on campus. Residents use the mess, common room, sports courts and Wi-Fi described on the university's hostel pages.",
     imageUrl: null,
     wardenName: "Dr. Meenakshi Sharma",
     wardenPhone: "9810000103",
@@ -47,7 +47,7 @@ const HOSTELS = [
     name: "A. Lalita Hostel",
     address: "A. Lalita Hostel, JC Bose University of Science & Technology, Sector 6, Faridabad",
     description:
-      "The newest hostel block on campus, with a dedicated gym and a health centre that runs regular wellness camps for residents.",
+      "A girls' hostel block on campus. Residents use the gym, first aid and health facilities described on the university's hostel pages.",
     imageUrl: "/images/hostels/a-lalita.webp",
     wardenName: "Dr. Priya Malhotra",
     wardenPhone: "9810000104",
@@ -120,7 +120,7 @@ async function main() {
   }
 
   console.log("Creating chief warden and wardens...");
-  const chiefWarden = await db.user.create({
+  await db.user.create({
     data: {
       name: "Dr. Alka Singh",
       email: "chiefwarden@ymcahostels.demo",

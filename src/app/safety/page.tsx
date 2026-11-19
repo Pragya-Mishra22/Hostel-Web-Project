@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Phone, ShieldAlert, HeartPulse, Scale, Flame, Siren, Users } from "lucide-react";
-import { Navbar } from "@/components/ui/navbar";
+import { Phone, Mail, ExternalLink, ShieldAlert, HeartPulse, Flame, Siren, Landmark } from "lucide-react";
+import { PublicHeader } from "@/components/site/public-header";
 import { Footer } from "@/components/site/footer";
-import { db } from "@/lib/db";
+import { GooeyTextReveal } from "@/components/ui/gooey-text-reveal";
+import { LineHoverAnchor } from "@/components/ui/line-hover-link";
 
 export const metadata: Metadata = {
   title: "Safety & Contacts",
@@ -10,25 +11,34 @@ export const metadata: Metadata = {
 };
 
 /**
- * Placeholder numbers: wired so the real university, anti-ragging cell and
- * ICC numbers can replace these directly (see DESIGN.md §12). All open as
- * tel: links so a tap/click dials straight away on a phone.
+ * University contacts are taken from the official officers' directory
+ * (jcboseust.ac.in/contactofficers); national numbers are the public emergency
+ * and helpline numbers. A contact has a phone, an email, or a web page.
  */
+interface Contact {
+  label: string;
+  note?: string;
+  phone?: string;
+  phoneLabel?: string;
+  email?: string;
+  href?: string;
+}
+
 const CONTACT_GROUPS: {
   title: string;
   icon: typeof ShieldAlert;
   tone: "danger" | "warning" | "brand";
-  contacts: { label: string; phone: string; note?: string }[];
+  contacts: Contact[];
 }[] = [
   {
-    title: "Ragging & harassment",
+    title: "Ragging and harassment",
     icon: ShieldAlert,
     tone: "danger",
     contacts: [
-      { label: "University Anti-Ragging Committee", phone: "1800000101", note: "24x7, confidential" },
-      { label: "Internal Complaints Committee (ICC) for harassment", phone: "1800000102" },
-      { label: "UGC National Anti-Ragging Helpline", phone: "18001805522", note: "Toll-free, nationwide" },
-      { label: "Chief Warden, Women's Hostels", phone: "9810000100" },
+      { label: "UGC National Anti-Ragging Helpline", phone: "18001805522", phoneLabel: "1800 180 5522", note: "Toll-free, nationwide" },
+      { label: "University Proctor (Prof. Manjeet Singh)", phone: "01292310190", phoneLabel: "0129-2310190", email: "proctor@jcboseust.ac.in" },
+      { label: "Chief Warden, Girls' Hostels (Prof. Neelam Turk)", email: "girlshostel@jcboseust.ac.in", note: "Email, as listed in the officers' directory" },
+      { label: "University student grievance page", href: "https://jcboseust.ac.in/student-grievance", note: "File a grievance online" },
     ],
   },
   {
@@ -36,116 +46,115 @@ const CONTACT_GROUPS: {
     icon: HeartPulse,
     tone: "danger",
     contacts: [
-      { label: "Campus Health Centre", phone: "9810000201", note: "On-campus clinic" },
       { label: "National Ambulance Service", phone: "108" },
+      { label: "University Medical Officer (Dr. Ankur Sharma)", email: "dispensary@jcboseust.ac.in", note: "The girls' hostels also offer first aid and a 24x7 ambulance" },
     ],
   },
   {
-    title: "Fire & security",
+    title: "Fire, police and any emergency",
     icon: Flame,
     tone: "warning",
     contacts: [
-      { label: "Campus Security Control Room", phone: "9810000202", note: "24x7" },
-      { label: "Fire Service (National)", phone: "101" },
-      { label: "Police Control Room (National)", phone: "100" },
+      { label: "National Emergency Number", phone: "112" },
+      { label: "Police", phone: "100" },
+      { label: "Fire Service", phone: "101" },
+      { label: "Women Helpline", phone: "1091", note: "Also 181" },
     ],
   },
   {
-    title: "Legal & counselling support",
-    icon: Scale,
+    title: "University offices",
+    icon: Landmark,
     tone: "brand",
     contacts: [
-      { label: "Women's Helpline (National)", phone: "1091" },
-      { label: "Campus Counselling Cell", phone: "9810000203", note: "By appointment, confidential" },
+      { label: "Registrar (Prof. Ajay Ranga)", phone: "01292310104", phoneLabel: "0129-2310104", email: "registrar@jcboseust.ac.in" },
+      { label: "Dean, Student Welfare (Dr. Pradeep Kumar)", email: "chw@jcboseust.ac.in" },
+      { label: "Full officers' directory", href: "https://jcboseust.ac.in/contactofficers", note: "Every university office and email" },
     ],
   },
 ];
 
 const toneClasses: Record<string, string> = {
-  danger: "bg-red-50 text-danger-600 dark:bg-red-950/20",
-  warning: "bg-amber-50 text-warning-600 dark:bg-amber-950/20",
-  brand: "bg-brand-50 text-brand-700",
+  danger: "bg-danger-soft text-danger-fg",
+  warning: "bg-warning-soft text-warning-fg",
+  brand: "bg-brand-soft text-accent-fg",
 };
 
-export default async function SafetyPage() {
-  const hostels = await db.hostel.findMany({
-    select: { name: true, code: true, wardenName: true, wardenPhone: true },
-    orderBy: { name: "asc" },
-  });
+const pill =
+  "inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1.5 text-sm font-semibold text-accent-fg transition-transform hover:-translate-y-0.5";
 
+export default function SafetyPage() {
   return (
     <>
-      <Navbar />
-      <main className="mx-auto max-w-5xl px-4 py-14 md:px-6 md:py-20">
-        <div className="flex items-center gap-3 rounded-2xl border border-danger-500/30 bg-red-50 px-5 py-4 dark:bg-red-950/20">
-          <Siren className="size-6 shrink-0 text-danger-600" aria-hidden="true" />
-          <p className="text-sm font-medium text-danger-600">
-            If you are in immediate danger, call 100 (Police) or 108 (Ambulance) first, then inform your
-            warden.
-          </p>
-        </div>
+      <PublicHeader />
+      <main className="w-full bg-page">
+        <section id="emergency" className="gutter bg-gradient-to-br from-brand-900 to-brand-950 pb-14 pt-32 text-white md:pb-20">
+          <div className="flex items-center gap-3 rounded-2xl border border-danger-500/40 bg-danger-500/15 px-5 py-4">
+            <Siren className="size-6 shrink-0 text-red-300" aria-hidden="true" />
+            <p className="text-sm font-medium text-red-100">
+              If you are in immediate danger, call 112 (any emergency), 100 (Police) or 108 (Ambulance) first, then inform your warden.
+            </p>
+          </div>
 
-        <h1 className="mt-10 font-display text-3xl font-bold text-ink md:text-4xl">Safety &amp; Contacts</h1>
-        <p className="mt-3 max-w-2xl text-ink-muted">
-          Every number below is organized by the kind of help you need, so you can call the right
-          person without delay. These are placeholder contact numbers for this demo build and should
-          be replaced with the university's current, verified numbers before real use.
-        </p>
+          <GooeyTextReveal className="mt-10 max-w-3xl">
+            <h1 className="font-display text-4xl font-extrabold md:text-6xl">Safety &amp; Contacts</h1>
+            <p className="mt-4 text-base text-white/75 md:text-lg">
+              Every contact below is grouped by the kind of help you need, so you can reach the right person without delay.
+              University details come from the official officers&apos; directory.
+            </p>
+          </GooeyTextReveal>
+        </section>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {CONTACT_GROUPS.map((group) => (
-            <div key={group.title} className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-6">
-              <div className="flex items-center gap-3">
-                <span className={`flex size-10 items-center justify-center rounded-xl ${toneClasses[group.tone]}`}>
-                  <group.icon className="size-5" aria-hidden="true" />
-                </span>
-                <h2 className="font-display text-lg font-bold text-ink">{group.title}</h2>
-              </div>
-              <ul className="mt-5 space-y-3">
-                {group.contacts.map((c) => (
-                  <li key={c.label} className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
+        <section id="contacts" className="gutter py-14 md:py-20">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4">
+            {CONTACT_GROUPS.map((group) => (
+              <div key={group.title} className="flex flex-col rounded-3xl border border-line bg-card p-6">
+                <div className="flex items-center gap-3">
+                  <span className={`flex size-11 items-center justify-center rounded-2xl ${toneClasses[group.tone]}`}>
+                    <group.icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <h2 className="font-display text-lg font-bold text-ink">{group.title}</h2>
+                </div>
+                <ul className="mt-5 space-y-5">
+                  {group.contacts.map((c) => (
+                    <li key={c.label}>
                       <p className="text-sm font-medium leading-snug text-ink">{c.label}</p>
-                      {c.note ? <p className="text-xs text-ink-muted">{c.note}</p> : null}
-                    </div>
-                    <a
-                      href={`tel:${c.phone}`}
-                      className="flex shrink-0 items-center gap-1.5 rounded-lg bg-surface-muted px-3 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
-                    >
-                      <Phone className="size-3.5" aria-hidden="true" />
-                      {c.phone}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+                      {c.note ? <p className="mt-0.5 text-xs text-ink-muted">{c.note}</p> : null}
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {c.phone ? (
+                          <a href={`tel:${c.phone}`} className={pill}>
+                            <Phone className="size-3.5" aria-hidden="true" />
+                            {c.phoneLabel ?? c.phone}
+                          </a>
+                        ) : null}
+                        {c.email ? (
+                          <a href={`mailto:${c.email}`} className={pill}>
+                            <Mail className="size-3.5" aria-hidden="true" />
+                            {c.email}
+                          </a>
+                        ) : null}
+                        {c.href ? (
+                          <a href={c.href} target="_blank" rel="noopener noreferrer" className={pill}>
+                            <ExternalLink className="size-3.5" aria-hidden="true" />
+                            Open page
+                          </a>
+                        ) : null}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-        <h2 className="mt-14 flex items-center gap-2 font-display text-2xl font-bold text-ink">
-          <Users className="size-5 text-brand-600" aria-hidden="true" />
-          Your hostel warden
-        </h2>
-        <p className="mt-2 text-sm text-ink-muted">
-          For day-to-day issues, your own hostel&apos;s warden is usually the fastest person to reach.
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {hostels.map((h) => (
-            <div key={h.code} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">{h.code}</p>
-              <p className="mt-1 text-sm font-semibold text-ink">{h.name}</p>
-              <p className="mt-1 text-sm text-ink-muted">{h.wardenName}</p>
-              {h.wardenPhone ? (
-                <a
-                  href={`tel:${h.wardenPhone}`}
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 hover:underline"
-                >
-                  <Phone className="size-3.5" aria-hidden="true" /> {h.wardenPhone}
-                </a>
-              ) : null}
-            </div>
-          ))}
-        </div>
+          <p className="mt-10 max-w-3xl text-sm text-ink-muted">
+            Your own hostel warden is usually the fastest person to reach for day-to-day matters; their details are on your
+            hostel notice board. Directory details can change, so check the{" "}
+            <LineHoverAnchor href="https://jcboseust.ac.in/contactofficers" target="_blank" rel="noopener noreferrer" variant="double" className="font-semibold text-accent-fg">
+              official directory
+            </LineHoverAnchor>{" "}
+            if a number does not connect.
+          </p>
+        </section>
       </main>
       <Footer />
     </>

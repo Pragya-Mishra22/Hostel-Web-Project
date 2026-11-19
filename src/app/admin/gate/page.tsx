@@ -43,7 +43,7 @@ export default async function AdminGatePage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-2xl font-bold text-ink">Gate register</h1>
-        <p className="mt-1 text-sm text-ink-muted">Log who left and who's back, straight from an approved leave.</p>
+        <p className="mt-1 text-sm text-ink-muted">Log who left and who&apos;s back, straight from an approved leave.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -59,7 +59,7 @@ export default async function AdminGatePage() {
         ) : (
           <ul className="space-y-2">
             {awaitingDeparture.map((l) => (
-              <li key={l.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+              <li key={l.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-card p-4">
                 <div>
                   <p className="font-medium text-ink">{l.student.user.name} ({l.student.rollNumber})</p>
                   <p className="text-xs text-ink-muted">
@@ -80,7 +80,7 @@ export default async function AdminGatePage() {
         ) : (
           <ul className="space-y-2">
             {outNow.map((l) => (
-              <li key={l.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+              <li key={l.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-card p-4">
                 <div>
                   <p className="font-medium text-ink">{l.student.user.name} ({l.student.rollNumber})</p>
                   <p className="text-xs text-ink-muted">Expected back by {formatDate(l.toDate)}</p>

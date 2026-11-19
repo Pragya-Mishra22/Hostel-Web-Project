@@ -18,14 +18,14 @@ export interface GatePassData {
 /** The approved pass a student shows at the gate: no separate sign-off needed. */
 export function GatePass({ leave, showPrintButton = true }: { leave: GatePassData; showPrintButton?: boolean }) {
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto w-full max-w-lg xl:mx-0">
       {showPrintButton ? (
         <div className="no-print mb-4 flex justify-end">
           <PrintButton />
         </div>
       ) : null}
 
-      <div className="rounded-2xl border-2 border-success-500/40 bg-green-50/60 p-6 print:rounded-none print:border print:border-black print:bg-transparent dark:bg-green-950/10">
+      <div className="rounded-2xl border-2 border-success-500/40 bg-success-soft p-6 print:rounded-none print:border print:border-black print:bg-transparent">
         <div className="flex items-center justify-between border-b border-success-500/30 pb-4">
           <div className="flex items-center gap-2.5">
             <span className="flex size-9 items-center justify-center rounded-lg bg-brand-600 text-white">

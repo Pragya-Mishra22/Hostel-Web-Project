@@ -8,9 +8,11 @@ import { AlertCircle, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { KineticLoader } from "@/components/ui/kinetic-loader";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function LoginForm() {
   const router = useRouter();
+  const hydrated = useHydrated();
   const searchParams = useSearchParams();
   const [serverError, setServerError] = React.useState<string | null>(null);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -33,8 +35,10 @@ export function LoginForm() {
       setServerError(json.error ?? "Something went wrong. Please try again.");
       return;
     }
+    // Only follow same-site paths from ?next= (never an external URL).
     const next = searchParams.get("next");
-    router.push(next || json.redirectTo || "/");
+    const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : null;
+    router.push(safeNext || json.redirectTo || "/");
     router.refresh();
   };
 
@@ -43,7 +47,7 @@ export function LoginForm() {
       {serverError ? (
         <div
           role="alert"
-          className="flex items-start gap-2.5 rounded-xl border border-danger-500/30 bg-red-50 px-4 py-3 text-sm text-danger-600 dark:bg-red-950/20"
+          className="flex items-start gap-2.5 rounded-xl border border-danger-500/30 bg-danger-soft px-4 py-3 text-sm text-danger-fg"
         >
           <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           <span>{serverError}</span>
@@ -62,12 +66,12 @@ export function LoginForm() {
             autoComplete="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
-            className="h-11 w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] pl-10 pr-3.5 text-sm text-ink outline-none transition-colors focus:border-brand-500"
+            className="h-11 w-full rounded-xl border border-line bg-card pl-10 pr-3.5 text-sm text-ink outline-none transition-colors focus:border-brand-500"
             {...register("email")}
           />
         </div>
         {errors.email ? (
-          <p id="email-error" className="mt-1.5 text-sm text-danger-600">
+          <p id="email-error" className="mt-1.5 text-sm text-danger-fg">
             {errors.email.message}
           </p>
         ) : null}
@@ -85,7 +89,7 @@ export function LoginForm() {
             autoComplete="current-password"
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? "password-error" : undefined}
-            className="h-11 w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] pl-10 pr-10 text-sm text-ink outline-none transition-colors focus:border-brand-500"
+            className="h-11 w-full rounded-xl border border-line bg-card pl-10 pr-10 text-sm text-ink outline-none transition-colors focus:border-brand-500"
             {...register("password")}
           />
           <button
@@ -98,13 +102,13 @@ export function LoginForm() {
           </button>
         </div>
         {errors.password ? (
-          <p id="password-error" className="mt-1.5 text-sm text-danger-600">
+          <p id="password-error" className="mt-1.5 text-sm text-danger-fg">
             {errors.password.message}
           </p>
         ) : null}
       </div>
 
-      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!hydrated || isSubmitting}>
         {isSubmitting ? <KineticLoader label="Signing in" /> : "Log in"}
       </Button>
     </form>

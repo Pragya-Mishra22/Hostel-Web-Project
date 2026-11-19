@@ -31,7 +31,7 @@ export default async function StudentComplaintsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-bold text-ink">Complaint box</h1>
-        <p className="mt-1 text-sm text-ink-muted">Raise an issue and track it until it's resolved.</p>
+        <p className="mt-1 text-sm text-ink-muted">Raise an issue and track it until it&apos;s resolved.</p>
       </div>
 
       <NewComplaintForm />
@@ -41,10 +41,10 @@ export default async function StudentComplaintsPage() {
       ) : (
         <ul className="space-y-3">
           {complaints.map((c) => (
-            <li key={c.id} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+            <li key={c.id} className="rounded-xl border border-line bg-card p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="text-xs font-medium text-brand-600">{CATEGORY_LABEL[c.category]}</p>
+                  <p className="text-xs font-medium text-accent-fg">{CATEGORY_LABEL[c.category]}</p>
                   <p className="mt-0.5 font-semibold text-ink">{c.title}</p>
                 </div>
                 <Badge tone={statusTone(c.status)}>{c.status.replace("_", " ")}</Badge>

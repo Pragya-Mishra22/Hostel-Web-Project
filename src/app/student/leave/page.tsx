@@ -32,6 +32,8 @@ export default async function StudentLeavePage() {
         </p>
       </div>
 
+      <div className="grid gap-8 xl:grid-cols-2 xl:items-start">
+        <div className="space-y-8">
       {latestApproved ? (
         <GatePass
           leave={{
@@ -50,12 +52,14 @@ export default async function StudentLeavePage() {
       ) : null}
 
       {hasPending ? (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-50 px-4 py-3 text-sm text-warning-600 dark:bg-amber-950/20">
+        <div className="rounded-xl border border-warning-500/30 bg-warning-soft px-4 py-3 text-sm text-warning-fg">
           Your latest application is awaiting your warden&apos;s decision.
         </div>
       ) : (
         <NewLeaveForm />
       )}
+
+        </div>
 
       <div>
         <h2 className="mb-3 font-display text-base font-bold text-ink">Application history</h2>
@@ -64,7 +68,7 @@ export default async function StudentLeavePage() {
         ) : (
           <ul className="space-y-3">
             {leaves.map((l) => (
-              <li key={l.id} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+              <li key={l.id} className="rounded-xl border border-line bg-card p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-semibold text-ink">{l.destination}</p>
@@ -84,6 +88,7 @@ export default async function StudentLeavePage() {
             ))}
           </ul>
         )}
+      </div>
       </div>
     </div>
   );

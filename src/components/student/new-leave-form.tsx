@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { KineticLoader } from "@/components/ui/kinetic-loader";
 
 const inputClass =
-  "w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
+  "w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
 
 export function NewLeaveForm() {
   const router = useRouter();
@@ -38,11 +38,11 @@ export function NewLeaveForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4 rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4 rounded-2xl border border-line bg-card p-5">
       <h2 className="font-display text-base font-bold text-ink">Apply for leave</h2>
 
       {serverError ? (
-        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-red-50 px-3 py-2 text-sm text-danger-600 dark:bg-red-950/20">
+        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-danger-soft px-3 py-2 text-sm text-danger-fg">
           <AlertCircle className="size-4 shrink-0" aria-hidden="true" /> {serverError}
         </div>
       ) : null}
@@ -53,14 +53,14 @@ export function NewLeaveForm() {
             Leaving on
           </label>
           <input id="fromDate" type="date" className={inputClass} {...register("fromDate")} />
-          {errors.fromDate ? <p className="mt-1.5 text-sm text-danger-600">{errors.fromDate.message}</p> : null}
+          {errors.fromDate ? <p className="mt-1.5 text-sm text-danger-fg">{errors.fromDate.message}</p> : null}
         </div>
         <div>
           <label htmlFor="toDate" className="mb-1.5 block text-sm font-medium text-ink">
             Returning on
           </label>
           <input id="toDate" type="date" className={inputClass} {...register("toDate")} />
-          {errors.toDate ? <p className="mt-1.5 text-sm text-danger-600">{errors.toDate.message}</p> : null}
+          {errors.toDate ? <p className="mt-1.5 text-sm text-danger-fg">{errors.toDate.message}</p> : null}
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export function NewLeaveForm() {
           Destination
         </label>
         <input id="destination" className={inputClass} placeholder="e.g. Home, Rohtak" {...register("destination")} />
-        {errors.destination ? <p className="mt-1.5 text-sm text-danger-600">{errors.destination.message}</p> : null}
+        {errors.destination ? <p className="mt-1.5 text-sm text-danger-fg">{errors.destination.message}</p> : null}
       </div>
 
       <div>
@@ -77,10 +77,10 @@ export function NewLeaveForm() {
           Reason
         </label>
         <textarea id="reason" rows={2} className={inputClass} {...register("reason")} />
-        {errors.reason ? <p className="mt-1.5 text-sm text-danger-600">{errors.reason.message}</p> : null}
+        {errors.reason ? <p className="mt-1.5 text-sm text-danger-fg">{errors.reason.message}</p> : null}
       </div>
 
-      <Button type="submit" liquid disabled={isSubmitting}>
+      <Button type="submit" variant="brand" disabled={isSubmitting}>
         {isSubmitting ? <KineticLoader label="Submitting" /> : "Submit application"}
       </Button>
     </form>

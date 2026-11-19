@@ -8,10 +8,11 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { KineticLoader } from "@/components/ui/kinetic-loader";
+import { useHydrated } from "@/lib/use-hydrated";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] px-3.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
+  "h-11 w-full rounded-xl border border-line bg-card px-3.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
 
 function Field({
   label,
@@ -30,13 +31,14 @@ function Field({
         {label}
       </label>
       {children}
-      {error ? <p className="mt-1.5 text-sm text-danger-600">{error}</p> : null}
+      {error ? <p className="mt-1.5 text-sm text-danger-fg">{error}</p> : null}
     </div>
   );
 }
 
 export function RegisterForm({ hostels }: { hostels: { id: string; name: string }[] }) {
   const router = useRouter();
+  const hydrated = useHydrated();
   const searchParams = useSearchParams();
   const [serverError, setServerError] = React.useState<string | null>(null);
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
@@ -48,7 +50,8 @@ export function RegisterForm({ hostels }: { hostels: { id: string; name: string 
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      preferredHostelId: searchParams.get("hostel") ?? hostels[0]?.id ?? "",
+      // Only trust ?hostel= when it names a real hostel; otherwise use the first one.
+      preferredHostelId: hostels.find((h) => h.id === searchParams.get("hostel"))?.id ?? hostels[0]?.id ?? "",
       year: 1,
     },
   });
@@ -73,7 +76,7 @@ export function RegisterForm({ hostels }: { hostels: { id: string; name: string 
     return (
       <div
         role="status"
-        className="flex items-start gap-3 rounded-xl border border-success-500/30 bg-green-50 px-4 py-4 text-sm text-success-600 dark:bg-green-950/20"
+        className="flex items-start gap-3 rounded-xl border border-success-500/30 bg-success-soft px-4 py-4 text-sm text-success-fg"
       >
         <CheckCircle2 className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
         <span>{successMessage}</span>
@@ -86,7 +89,7 @@ export function RegisterForm({ hostels }: { hostels: { id: string; name: string 
       {serverError ? (
         <div
           role="alert"
-          className="flex items-start gap-2.5 rounded-xl border border-danger-500/30 bg-red-50 px-4 py-3 text-sm text-danger-600 dark:bg-red-950/20"
+          className="flex items-start gap-2.5 rounded-xl border border-danger-500/30 bg-danger-soft px-4 py-3 text-sm text-danger-fg"
         >
           <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           <span>{serverError}</span>
@@ -142,7 +145,7 @@ export function RegisterForm({ hostels }: { hostels: { id: string; name: string 
         <textarea id="address" rows={2} className={cn(inputClass, "h-auto py-2.5")} {...register("address")} />
       </Field>
 
-      <Button type="submit" size="lg" liquid className="w-full" disabled={isSubmitting}>
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!hydrated || isSubmitting}>
         {isSubmitting ? <KineticLoader label="Submitting" /> : "Submit registration"}
       </Button>
       <p className="text-center text-xs text-ink-muted">

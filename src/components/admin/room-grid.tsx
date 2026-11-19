@@ -62,10 +62,10 @@ export function RoomGrid({ rooms, unassignedStudents }: { rooms: RoomGridRoom[];
 
   return (
     <div className="space-y-4">
-      {error ? <p className="text-sm text-danger-600">{error}</p> : null}
+      {error ? <p className="text-sm text-danger-fg">{error}</p> : null}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {rooms.map((room) => (
-          <div key={room.id} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+          <div key={room.id} className="rounded-xl border border-line bg-card p-4">
             <div className="flex items-center justify-between">
               <p className="font-display text-sm font-bold text-ink">Room {room.roomNumber}</p>
               <span className="text-xs text-ink-muted">Floor {room.floor}</span>
@@ -76,7 +76,7 @@ export function RoomGrid({ rooms, unassignedStudents }: { rooms: RoomGridRoom[];
                   <div
                     className={cn(
                       "flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm",
-                      bed.studentName ? "border-brand-200 bg-brand-50" : "border-dashed border-[var(--color-line)]",
+                      bed.studentName ? "border-brand-200 bg-brand-soft" : "border-dashed border-line",
                     )}
                   >
                     <span className="flex items-center gap-2 text-ink">
@@ -96,7 +96,7 @@ export function RoomGrid({ rooms, unassignedStudents }: { rooms: RoomGridRoom[];
                         disabled={busy === bed.id}
                         onClick={() => vacate(bed.id)}
                         aria-label={`Vacate bed ${bed.bedNumber}`}
-                        className="flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted hover:bg-red-50 hover:text-danger-600"
+                        className="flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted hover:bg-danger-soft hover:text-danger-fg"
                       >
                         <UserMinus className="size-4" aria-hidden="true" />
                       </button>
@@ -106,7 +106,7 @@ export function RoomGrid({ rooms, unassignedStudents }: { rooms: RoomGridRoom[];
                         disabled={busy === bed.id || unassignedStudents.length === 0}
                         onClick={() => setActiveBed(bed.id)}
                         aria-label={`Allocate bed ${bed.bedNumber}`}
-                        className="flex size-8 shrink-0 items-center justify-center rounded-md text-brand-700 hover:bg-brand-100 disabled:opacity-40"
+                        className="flex size-8 shrink-0 items-center justify-center rounded-md text-accent-fg hover:bg-brand-soft disabled:opacity-40"
                       >
                         <UserPlus className="size-4" aria-hidden="true" />
                       </button>
@@ -114,7 +114,7 @@ export function RoomGrid({ rooms, unassignedStudents }: { rooms: RoomGridRoom[];
                   </div>
 
                   {activeBed === bed.id ? (
-                    <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-2 shadow-lg">
+                    <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-xl border border-line bg-card p-2 shadow-lg">
                       <div className="mb-1 flex items-center justify-between px-1">
                         <span className="text-xs font-semibold text-ink-muted">Allocate to</span>
                         <button type="button" onClick={() => setActiveBed(null)} aria-label="Cancel" className="text-ink-muted hover:text-ink">

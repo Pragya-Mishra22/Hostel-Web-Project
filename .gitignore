@@ -14,3 +14,6 @@ prisma/dev.db-journal
 next-env.d.ts
 .vercel
 tsconfig.tsbuildinfo
+
+# Playwright MCP session logs
+.playwright-mcp/

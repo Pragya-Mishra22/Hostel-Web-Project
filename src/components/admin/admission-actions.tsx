@@ -29,11 +29,11 @@ export function AdmissionActions({ studentId }: { studentId: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      {error ? <span className="text-xs text-danger-600">{error}</span> : null}
-      <Button size="sm" variant="secondary" onClick={() => decide("REJECT")} disabled={loading !== null}>
+      {error ? <span className="text-xs text-danger-fg">{error}</span> : null}
+      <Button size="sm" variant="destructive" onClick={() => decide("REJECT")} disabled={loading !== null}>
         <X className="size-4" aria-hidden="true" /> Reject
       </Button>
-      <Button size="sm" onClick={() => decide("APPROVE")} disabled={loading !== null}>
+      <Button size="sm" variant="success" onClick={() => decide("APPROVE")} disabled={loading !== null}>
         <Check className="size-4" aria-hidden="true" /> Approve
       </Button>
     </div>

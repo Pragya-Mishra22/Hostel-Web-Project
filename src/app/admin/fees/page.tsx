@@ -73,7 +73,7 @@ export default async function AdminFeesPage({
             href={filterLink({ type: type === t ? undefined : t })}
             className={cn(
               "rounded-full border px-3 py-1 text-xs font-medium",
-              type === t ? "border-brand-600 bg-brand-600 text-white" : "border-[var(--color-line)] text-ink-muted",
+              type === t ? "border-brand-600 bg-brand-600 text-white" : "border-line text-ink-muted",
             )}
           >
             {TYPE_LABEL[t]}
@@ -86,7 +86,7 @@ export default async function AdminFeesPage({
             href={filterLink({ status: status === s ? undefined : s })}
             className={cn(
               "rounded-full border px-3 py-1 text-xs font-medium",
-              status === s ? "border-brand-600 bg-brand-600 text-white" : "border-[var(--color-line)] text-ink-muted",
+              status === s ? "border-brand-600 bg-brand-600 text-white" : "border-line text-ink-muted",
             )}
           >
             {s}
@@ -97,7 +97,7 @@ export default async function AdminFeesPage({
       {fees.length === 0 ? (
         <EmptyState icon={Wallet} title="No fee records match" description="Try clearing a filter, or add a new record above." />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[var(--color-line)]">
+        <div className="overflow-hidden rounded-2xl border border-line">
           <table className="w-full text-sm">
             <thead className="bg-surface-muted text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
               <tr>
@@ -109,7 +109,7 @@ export default async function AdminFeesPage({
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-line)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-line bg-card">
               {fees.map((f) => (
                 <tr key={f.id}>
                   <td className="px-4 py-3">

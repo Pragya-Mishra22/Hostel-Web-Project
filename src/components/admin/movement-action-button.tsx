@@ -29,8 +29,8 @@ export function MovementActionButton({ leaveId, type }: { leaveId: string; type:
 
   return (
     <div className="flex items-center gap-2">
-      {error ? <span className="text-xs text-danger-600">{error}</span> : null}
-      <Button size="sm" variant={type === "DEPARTURE" ? "secondary" : "primary"} onClick={log} disabled={loading}>
+      {error ? <span className="text-xs text-danger-fg">{error}</span> : null}
+      <Button size="sm" variant={type === "DEPARTURE" ? "gold" : "success"} onClick={log} disabled={loading}>
         {type === "DEPARTURE" ? <LogOut className="size-4" aria-hidden="true" /> : <LogIn className="size-4" aria-hidden="true" />}
         {loading ? "Logging…" : type === "DEPARTURE" ? "Mark departed" : "Mark returned"}
       </Button>

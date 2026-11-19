@@ -2,19 +2,27 @@
 
 import * as React from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * SmoothScroll — wraps a section in Lenis's buttery scroll easing. Mounted
- * on the home page only (not globally): a site-wide scroll hijack can fight
- * screen readers and the browser's native scroll restoration on data pages,
- * which is exactly the "no errors anywhere" bar this build has to clear.
+ * Lenis smooth scrolling for the home page. Mounted only there: a site-wide
+ * scroll hijack would fight screen readers and native scroll restoration on the
+ * data-heavy portal pages. Skipped for reduced-motion users. Kept in sync with
+ * GSAP ScrollTrigger so scroll reveals fire at the right moment.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({ autoRaf: true });
-    return () => lenis.destroy();
+    lenis.on("scroll", ScrollTrigger.update);
+    return () => {
+      lenis.off("scroll", ScrollTrigger.update);
+      lenis.destroy();
+    };
   }, []);
 
   return <>{children}</>;

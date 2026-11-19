@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { Check, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function FeeToggleButton({ feeId, status }: { feeId: string; status: "PAID" | "PENDING" }) {
   const router = useRouter();
@@ -15,19 +16,11 @@ export function FeeToggleButton({ feeId, status }: { feeId: string; status: "PAI
     if (res.ok) router.refresh();
   };
 
+  const paid = status === "PAID";
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      disabled={loading}
-      className={cn(
-        "rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors disabled:opacity-50",
-        status === "PAID"
-          ? "border-[var(--color-line)] text-ink-muted hover:border-danger-500/40 hover:bg-red-50 hover:text-danger-600"
-          : "border-success-500/40 bg-green-50 text-success-600 hover:bg-green-100 dark:bg-green-950/20",
-      )}
-    >
-      {loading ? "Saving…" : status === "PAID" ? "Mark pending" : "Mark paid"}
-    </button>
+    <Button size="sm" variant={paid ? "secondary" : "success"} onClick={toggle} disabled={loading} className="min-w-32">
+      {paid ? <RotateCcw className="size-3.5" aria-hidden="true" /> : <Check className="size-3.5" aria-hidden="true" />}
+      {loading ? "Saving..." : paid ? "Mark pending" : "Mark paid"}
+    </Button>
   );
 }

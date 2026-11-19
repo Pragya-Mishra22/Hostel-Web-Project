@@ -7,10 +7,10 @@ export const badgeVariants = cva(
     variants: {
       tone: {
         neutral: "bg-surface-muted text-ink-muted",
-        brand: "bg-brand-50 text-brand-700",
-        success: "bg-green-50 text-success-600 dark:bg-green-950/30",
-        warning: "bg-amber-50 text-warning-600 dark:bg-amber-950/30",
-        danger: "bg-red-50 text-danger-600 dark:bg-red-950/30",
+        brand: "bg-brand-soft text-accent-fg",
+        success: "bg-success-soft text-success-fg",
+        warning: "bg-warning-soft text-warning-fg",
+        danger: "bg-danger-soft text-danger-fg",
       },
     },
     defaultVariants: { tone: "neutral" },

@@ -15,7 +15,7 @@ export default async function StudentRoomPage() {
     return (
       <div className="space-y-6">
         <h1 className="font-display text-2xl font-bold text-ink">Your room</h1>
-        <div className="flex items-center gap-4 rounded-2xl border border-success-500/30 bg-green-50 p-6 dark:bg-green-950/20">
+        <div className="flex items-center gap-4 rounded-2xl border border-success-500/30 bg-success-soft p-6">
           <span className="flex size-12 items-center justify-center rounded-xl bg-success-600 text-white">
             <BedDouble className="size-6" aria-hidden="true" />
           </span>
@@ -27,7 +27,7 @@ export default async function StudentRoomPage() {
               Floor {student.bed.room.floor} · {student.hostel?.name}
             </p>
           </div>
-          <CheckCircle2 className="ml-auto size-5 shrink-0 text-success-600" aria-hidden="true" />
+          <CheckCircle2 className="ml-auto size-5 shrink-0 text-success-fg" aria-hidden="true" />
         </div>
       </div>
     );

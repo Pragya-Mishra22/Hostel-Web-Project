@@ -72,7 +72,7 @@ export default async function AdminRoomsPage({
                 "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
                 h.id === activeHostel.id
                   ? "border-brand-600 bg-brand-600 text-white"
-                  : "border-[var(--color-line)] text-ink-muted hover:border-brand-300 hover:text-ink",
+                  : "border-line text-ink-muted hover:border-brand-300 hover:text-ink",
               )}
             >
               {h.code}

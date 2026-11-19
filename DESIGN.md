@@ -188,3 +188,21 @@ You supplied a large reference set of custom components (liquid-morph buttons, G
 - **Copy rule** — no literal `--` in any on-page sentence/copy anywhere on the site.
 
 **New dependencies this adds:** `framer-motion`, `gsap`, `lenis`, `class-variance-authority`, `clsx`, `tailwind-merge`. All are installed and locked to specific versions.
+
+---
+
+## 14. As Built (supersedes §13 where they differ)
+
+The final build followed your component list more closely than the cautious plan in §13. What changed and why:
+
+- **Buttons.** The real `LiquidButton` (SVG filter plus animated ink blob) is the sitewide `Button`, on public, student and admin screens, with colour and size varying by variant. Raw `<button>` elements remain only for selection controls that are not calls to action: bed tiles, status chips, icon-only close and vacate buttons, and menu triggers.
+- **Content.** Apify was connected after all. Hostel facts, mess timings, FAQ answers, safety contacts and the officers' directory come from the official university pages. Fee amounts live in a PDF that was not read, so public pages link to it and the seeded fee amounts are demo values only.
+- **Glass dock.** Uses GSAP `MorphSVGPlugin` for the icon morphs (the plugin is free in GSAP 3.13) next to a string-keyed icon registry, so server components never pass component references to client components.
+- **Hero.** A notch nav with mega menus (hover on desktop, click-to-open on mouse, a drawer on touch) and the Ctrl+K search modal, with Alt+key shortcuts for quick actions.
+- **Reveals.** `GooeyTextReveal` has a safety timer that forces the final state if GSAP's lag smoothing stretches the tween on a slow machine, so text never stays blurred.
+- **Layout.** Every page is edge to edge through one `.gutter` utility (fluid horizontal padding, no centred max-width column). Checked for horizontal overflow at 320, 375, 414, 768, 1024, 1440, 1920 and 2560 px, and on every admin and student page at 390 and 1280 px in dark mode.
+- **Fonts.** Inter, Plus Jakarta Sans and JetBrains Mono are self-hosted Latin subsets (`src/app/fonts.css`), so the first paint waits on no external request.
+- **Theming.** Semantic colour tokens in `@theme`, a dark theme set from `localStorage` or the system preference before first paint, and `data-scroll-behavior="smooth"` on `<html>` so route changes still jump to the top instantly.
+- **Verified end to end.** Register, pending login blocked (403), warden approval, bed booking, complaint, leave request, leave approval, student gate pass, and gate register departure all run against the live app. `tsc`, ESLint and the production build are clean.
+- **Not measured.** Frame rate. The only browser available for testing renders in software, which made animation look slower than it will on a real GPU, so I did not tune against it.
+- **Photos.** Kalpana Chawla and Mother Teresa have no photo in `Hostel Images/`; their cards read "Photo coming soon".

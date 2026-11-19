@@ -18,7 +18,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
   if (!student) redirect("/login");
 
   return (
-    <AppShell navItems={NAV_ITEMS} userName={student.user.name} roleLabel={`Student · ${student.rollNumber}`}>
+    <AppShell area="student" navItems={NAV_ITEMS} userName={student.user.name} roleLabel={`Student · ${student.rollNumber}`}>
       {children}
     </AppShell>
   );

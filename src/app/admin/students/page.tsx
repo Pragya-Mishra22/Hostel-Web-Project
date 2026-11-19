@@ -48,14 +48,14 @@ export default async function AdminStudentsPage({
           name="q"
           defaultValue={q}
           placeholder="Search by name or roll number"
-          className="h-11 w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] pl-10 pr-3.5 text-sm text-ink outline-none focus:border-brand-500"
+          className="h-11 w-full rounded-xl border border-line bg-card pl-10 pr-3.5 text-sm text-ink outline-none focus:border-brand-500"
         />
       </form>
 
       {students.length === 0 ? (
         <EmptyState icon={Users} title="No students found" description="Try a different search, or check back once admissions are approved." />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[var(--color-line)]">
+        <div className="overflow-hidden rounded-2xl border border-line">
           <table className="w-full text-sm">
             <thead className="bg-surface-muted text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
               <tr>
@@ -66,11 +66,11 @@ export default async function AdminStudentsPage({
                 <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-line)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-line bg-card">
               {students.map((s) => (
                 <tr key={s.id}>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/students/${s.id}`} className="font-medium text-ink hover:text-brand-700 hover:underline">
+                    <Link href={`/admin/students/${s.id}`} className="font-medium text-ink hover:text-accent-fg hover:underline">
                       {s.user.name}
                     </Link>
                     <p className="text-xs text-ink-muted">{s.course}, Year {s.year}</p>

@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
+/* `dark:` follows the data-theme attribute (set before paint by the script in layout.tsx). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
   /* Institutional navy + warm gold identity */
   --color-brand-50: #eef4ff;
@@ -29,6 +31,7 @@
   --color-gold-700: #b45a09;
   --color-gold-800: #92460e;
   --color-gold-900: #783a0f;
+  --color-gold-950: #451a03;
 
   --color-success-500: #16a34a;
   --color-success-600: #15803d;
@@ -37,15 +40,24 @@
   --color-danger-500: #dc2626;
   --color-danger-600: #b91c1c;
 
-  /* Semantic surface/text tokens — reassigned per-theme below, outside
-     @theme, so every bg-surface / text-ink / border-line utility updates
-     automatically without needing a `dark:` variant on each usage. */
-  --color-surface: #ffffff;
-  --color-surface-muted: #f6f8fc;
+  /* Semantic tokens. Their values are reassigned for dark mode below
+     (outside @theme) so every utility built on them flips automatically. */
+  --color-page: #f3f6fc;
+  --color-card: #ffffff;
+  --color-surface-muted: #eaeff8;
   --color-ink: #0f1629;
-  --color-ink-muted: #51607a;
-  --color-line: #e3e8f2;
-  --color-ring: var(--color-brand-500);
+  --color-ink-muted: #4b5a75;
+  --color-line: #d9e0ee;
+  --color-ring: #335fe8;
+
+  --color-brand-soft: #e4ecff;
+  --color-accent-fg: #1d33a0;
+  --color-success-soft: #dcf5e6;
+  --color-success-fg: #146c3a;
+  --color-warning-soft: #fdf0d2;
+  --color-warning-fg: #8a4a06;
+  --color-danger-soft: #fde4e4;
+  --color-danger-fg: #a31b1b;
 
   --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-fade-in: fade-in 0.4s ease-out both;
@@ -70,32 +82,52 @@
   }
 }
 
-:root:not([data-theme="light"]) {
-  @media (prefers-color-scheme: dark) {
-    --color-surface: #0b1020;
-    --color-surface-muted: #10172a;
-    --color-ink: #eef2fb;
-    --color-ink-muted: #9aa7c2;
-    --color-line: #202a45;
-  }
-}
-
 :root[data-theme="dark"] {
-  --color-surface: #0b1020;
-  --color-surface-muted: #10172a;
-  --color-ink: #eef2fb;
-  --color-ink-muted: #9aa7c2;
-  --color-line: #202a45;
+  color-scheme: dark;
+  --color-page: #070b18;
+  --color-card: #0f1730;
+  --color-surface-muted: #0c1328;
+  --color-ink: #eaf0fc;
+  --color-ink-muted: #a3b1cd;
+  --color-line: #1f2b4a;
+  --color-ring: #8bb0ff;
+
+  --color-brand-soft: rgba(90, 135, 255, 0.16);
+  --color-accent-fg: #a9c2ff;
+  --color-success-soft: rgba(34, 197, 94, 0.14);
+  --color-success-fg: #6ee7a0;
+  --color-warning-soft: rgba(245, 158, 11, 0.15);
+  --color-warning-fg: #fcd277;
+  --color-danger-soft: rgba(239, 68, 68, 0.15);
+  --color-danger-fg: #fca5a5;
 }
 
 html {
+  position: relative;
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Lenis owns smooth scrolling on the home page; native smooth scroll would fight it. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
-  background: var(--color-surface);
+  background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  overflow-x: clip;
+  /* Scroll-linked animations (framer-motion useScroll) need a positioned ancestor. */
+  position: relative;
 }
 
 ::selection {
@@ -106,7 +138,401 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-ring);
   outline-offset: 2px;
-  border-radius: 4px;
+}
+
+/* Edge-to-edge horizontal padding used by every section, so content
+   spreads across the full viewport width instead of a centred column. */
+.gutter {
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .gutter {
+    padding-inline: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .gutter {
+    padding-inline: 3rem;
+  }
+}
+@media (min-width: 1536px) {
+  .gutter {
+    padding-inline: 5rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Line hover links (all variants). Used for every text link.           */
+/* ------------------------------------------------------------------ */
+.link-hover {
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  color: currentColor;
+  text-decoration: none;
+  outline: none;
+}
+.link-hover::before,
+.link-hover::after {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  pointer-events: none;
+}
+.link-hover::before {
+  content: "";
+}
+.link-hover:focus-visible {
+  border-radius: 0.25rem;
+  outline: 2px solid color-mix(in srgb, currentColor 45%, transparent);
+  outline-offset: 0.25rem;
+}
+.link-hover--slide::before {
+  transform: scale3d(0, 1, 1);
+  transform-origin: 100% 50%;
+  transition: transform 0.3s ease;
+}
+.link-hover--slide:hover::before,
+.link-hover--slide:focus-visible::before {
+  transform: scale3d(1, 1, 1);
+  transform-origin: 0% 50%;
+}
+.link-hover--double::before {
+  transform: scale3d(0, 1, 1);
+  transform-origin: 100% 50%;
+  transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.link-hover--double:hover::before,
+.link-hover--double:focus-visible::before {
+  transform: scale3d(1, 1, 1);
+  transform-origin: 0% 50%;
+  transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+}
+.link-hover--double::after {
+  content: "";
+  top: calc(100% + 4px);
+  transform: scale3d(0, 1, 1);
+  transform-origin: 0% 50%;
+  transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.link-hover--double:hover::after,
+.link-hover--double:focus-visible::after {
+  transform: scale3d(1, 1, 1);
+  transform-origin: 100% 50%;
+  transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+}
+.link-hover--grow::before {
+  transform: scale3d(0, 1, 1);
+  transform-origin: 100% 50%;
+  transition: transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+}
+.link-hover--grow:hover::before,
+.link-hover--grow:focus-visible::before {
+  transform: scale3d(1, 2, 1);
+  transform-origin: 0% 50%;
+  transition-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+}
+.link-hover--grow::after {
+  content: "";
+  top: calc(100% + 4px);
+  transform: scale3d(0, 1, 1);
+  transform-origin: 100% 50%;
+  transition: transform 0.4s 0.1s cubic-bezier(0.2, 1, 0.8, 1);
+}
+.link-hover--grow:hover::after,
+.link-hover--grow:focus-visible::after {
+  transform: scale3d(1, 1, 1);
+  transform-origin: 0% 50%;
+}
+.link-hover--strike {
+  padding-inline: 0.625rem;
+}
+.link-hover--strike::before {
+  top: 50%;
+  height: 2px;
+  transform: scale3d(0, 1, 1);
+  transform-origin: 100% 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1);
+}
+.link-hover--strike:hover::before,
+.link-hover--strike:focus-visible::before {
+  transform: scale3d(1, 1, 1);
+  transform-origin: 0% 50%;
+}
+.link-hover--strike span {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1);
+}
+.link-hover--strike:hover span,
+.link-hover--strike:focus-visible span {
+  transform: scale3d(1.08, 1.08, 1);
+}
+.link-hover--fade::before,
+.link-hover--fade::after {
+  opacity: 0;
+  transform: translate3d(0, 3px, 0);
+  transform-origin: 50% 0%;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 1, 0.8, 1),
+    opacity 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+}
+.link-hover--fade::after {
+  content: "";
+  left: 15%;
+  top: calc(100% + 4px);
+  width: 70%;
+}
+.link-hover--fade:hover::before,
+.link-hover--fade:hover::after,
+.link-hover--fade:focus-visible::before,
+.link-hover--fade:focus-visible::after {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.link-hover--fade::before,
+.link-hover--fade:hover::after,
+.link-hover--fade:focus-visible::after {
+  transition-delay: 0.1s;
+}
+.link-hover--pulse::before {
+  top: 100%;
+  height: 10px;
+  opacity: 0;
+}
+.link-hover--pulse:hover::before,
+.link-hover--pulse:focus-visible::before {
+  opacity: 1;
+  animation: line-hover-line-up 0.3s ease forwards;
+}
+.link-hover--pulse::after {
+  content: "";
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.link-hover--pulse:hover::after,
+.link-hover--pulse:focus-visible::after {
+  opacity: 1;
+  transition-delay: 0.3s;
+}
+.link-hover--swap::before {
+  transform: scale3d(0, 1, 1);
+  transform-origin: 0% 50%;
+  transition: transform 0.3s ease;
+}
+.link-hover--swap:hover::before,
+.link-hover--swap:focus-visible::before {
+  transform: scale3d(1, 1, 1);
+}
+.link-hover--swap::after {
+  content: "";
+  top: calc(100% + 4px);
+  transform-origin: 100% 50%;
+  transition: transform 0.3s ease;
+}
+.link-hover--swap:hover::after,
+.link-hover--swap:focus-visible::after {
+  transform: scale3d(0, 1, 1);
+}
+.link-hover--sweep {
+  padding-inline: 0.25rem;
+}
+.link-hover--sweep::before {
+  top: 0;
+  height: 100%;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  opacity: 0;
+}
+.link-hover--sweep:hover::before,
+.link-hover--sweep:focus-visible::before {
+  opacity: 1;
+  animation: line-hover-cover-up 0.3s ease forwards;
+}
+.link-hover--sweep::after {
+  content: "";
+  transition: opacity 0.3s ease;
+}
+.link-hover--sweep:hover::after,
+.link-hover--sweep:focus-visible::after {
+  opacity: 0;
+}
+.link-hover--bounce::before {
+  height: 7px;
+  border-radius: 999px;
+  transform: scale3d(1, 1, 1);
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+  transition-timing-function: cubic-bezier(0.2, 0.57, 0.67, 1.53);
+}
+.link-hover--bounce:hover::before,
+.link-hover--bounce:focus-visible::before {
+  opacity: 1;
+  transform: scale3d(1.18, 0.1, 1);
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.8, 0, 0.1, 1);
+}
+.link-hover--bounce span {
+  display: inline-block;
+  transform: translate3d(0, -4px, 0);
+  transition: transform 0.2s 0.05s cubic-bezier(0.2, 0.57, 0.67, 1.53);
+}
+.link-hover--bounce:hover span,
+.link-hover--bounce:focus-visible span {
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.8, 0, 0.1, 1);
+}
+.link-hover__graphic {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1px;
+  pointer-events: none;
+}
+.link-hover__graphic--stroke path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.link-hover:hover .link-hover__graphic--stroke path,
+.link-hover:focus-visible .link-hover__graphic--stroke path {
+  stroke-dashoffset: 0;
+}
+.link-hover--arc::before,
+.link-hover--scribble::before {
+  display: none;
+}
+.link-hover__graphic--arc {
+  left: -23%;
+  top: 73%;
+}
+.link-hover__graphic--arc path {
+  transition: stroke-dashoffset 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.link-hover:hover .link-hover__graphic--arc path,
+.link-hover:focus-visible .link-hover__graphic--arc path {
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.8, 1, 0.7, 1);
+}
+.link-hover__graphic--scribble {
+  top: 100%;
+}
+.link-hover__graphic--scribble path {
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.link-hover:hover .link-hover__graphic--scribble path,
+.link-hover:focus-visible .link-hover__graphic--scribble path {
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.8, 1, 0.7, 1);
+}
+@keyframes line-hover-line-up {
+  0% {
+    transform: scale3d(1, 0.045, 1);
+    transform-origin: 50% 100%;
+  }
+  50% {
+    transform: scale3d(1, 1, 1);
+    transform-origin: 50% 100%;
+  }
+  51% {
+    transform: scale3d(1, 1, 1);
+    transform-origin: 50% 0%;
+  }
+  100% {
+    transform: scale3d(1, 0.045, 1);
+    transform-origin: 50% 0%;
+  }
+}
+@keyframes line-hover-cover-up {
+  0% {
+    transform: scale3d(1, 0.045, 1);
+    transform-origin: 50% 100%;
+  }
+  50% {
+    transform: scale3d(1, 1, 1);
+    transform-origin: 50% 100%;
+  }
+  51% {
+    transform: scale3d(1, 1, 1);
+    transform-origin: 50% 0%;
+  }
+  100% {
+    transform: scale3d(1, 0.045, 1);
+    transform-origin: 50% 0%;
+  }
+}
+
+@keyframes intro-auto-hide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* Kinetic text loader keyframes */
+@keyframes ktl-dotMove {
+  0%,
+  100% {
+    transform: rotate(180deg) translate(-80px, -10px) rotate(-180deg);
+  }
+  50% {
+    transform: rotate(0deg) translate(-81px, 10px) rotate(0deg);
+  }
+}
+@keyframes ktl-letterStretch {
+  0%,
+  100% {
+    transform: scale(1, 0.35);
+    transform-origin: 100% 75%;
+  }
+  8%,
+  28% {
+    transform: scale(1, 1.4);
+    transform-origin: 100% 67%;
+  }
+  37% {
+    transform: scale(1, 0.875);
+    transform-origin: 100% 75%;
+  }
+  46% {
+    transform: scale(1, 1.03);
+    transform-origin: 100% 75%;
+  }
+  50%,
+  97% {
+    transform: scale(1);
+    transform-origin: 100% 75%;
+  }
+}
+@keyframes ktl-l-bounce {
+  0%,
+  45%,
+  70%,
+  100% {
+    transform: scaleY(1.11);
+  }
+  49% {
+    transform: scaleY(0.31);
+  }
+  50% {
+    transform: scaleY(0.16);
+  }
+  53% {
+    transform: scaleY(0.63);
+  }
+  60% {
+    transform: scaleY(1.275);
+  }
+  68% {
+    transform: scaleY(1.04);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -124,9 +550,6 @@ body {
 @media print {
   .no-print {
     display: none !important;
-  }
-  .print-only {
-    display: block !important;
   }
   body {
     background: #fff;

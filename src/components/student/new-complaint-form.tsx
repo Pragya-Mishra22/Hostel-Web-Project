@@ -20,7 +20,7 @@ const CATEGORIES: { value: ComplaintInput["category"]; label: string }[] = [
 ];
 
 const inputClass =
-  "w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
+  "w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-brand-500";
 
 export function NewComplaintForm() {
   const router = useRouter();
@@ -53,7 +53,7 @@ export function NewComplaintForm() {
 
   if (!open) {
     return (
-      <Button onClick={() => setOpen(true)} liquid>
+      <Button variant="gold" onClick={() => setOpen(true)}>
         <Plus className="size-4" aria-hidden="true" /> Raise a complaint
       </Button>
     );
@@ -63,7 +63,7 @@ export function NewComplaintForm() {
     <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="space-y-4 rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5"
+      className="space-y-4 rounded-2xl border border-line bg-card p-5"
     >
       <div className="flex items-center justify-between">
         <h2 className="font-display text-base font-bold text-ink">New complaint</h2>
@@ -78,7 +78,7 @@ export function NewComplaintForm() {
       </div>
 
       {serverError ? (
-        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-red-50 px-3 py-2 text-sm text-danger-600 dark:bg-red-950/20">
+        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-danger-soft px-3 py-2 text-sm text-danger-fg">
           <AlertCircle className="size-4 shrink-0" aria-hidden="true" /> {serverError}
         </div>
       ) : null}
@@ -101,7 +101,7 @@ export function NewComplaintForm() {
           Title
         </label>
         <input id="title" className={inputClass} placeholder="e.g. Room light not working" {...register("title")} />
-        {errors.title ? <p className="mt-1.5 text-sm text-danger-600">{errors.title.message}</p> : null}
+        {errors.title ? <p className="mt-1.5 text-sm text-danger-fg">{errors.title.message}</p> : null}
       </div>
 
       <div>
@@ -109,10 +109,10 @@ export function NewComplaintForm() {
           Description
         </label>
         <textarea id="description" rows={3} className={cn(inputClass)} {...register("description")} />
-        {errors.description ? <p className="mt-1.5 text-sm text-danger-600">{errors.description.message}</p> : null}
+        {errors.description ? <p className="mt-1.5 text-sm text-danger-fg">{errors.description.message}</p> : null}
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+      <Button type="submit" variant="primary" disabled={isSubmitting} className="w-full sm:w-auto">
         {isSubmitting ? <KineticLoader label="Submitting" /> : "Submit complaint"}
       </Button>
     </form>

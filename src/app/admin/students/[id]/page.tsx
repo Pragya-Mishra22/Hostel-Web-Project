@@ -42,7 +42,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-4 rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5 lg:col-span-1">
+        <div className="space-y-4 rounded-2xl border border-line bg-card p-5 lg:col-span-1">
           <h2 className="font-display text-sm font-bold text-ink">Profile</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex items-center gap-2">
@@ -62,14 +62,14 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
               <dd className="text-ink">{student.address}</dd>
             </div>
           </dl>
-          <div className="border-t border-[var(--color-line)] pt-3">
+          <div className="border-t border-line pt-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Guardian</p>
             <p className="mt-1 text-sm text-ink">{student.guardianName}</p>
             <p className="text-sm text-ink-muted">{student.guardianPhone}</p>
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5 lg:col-span-2">
+        <div className="space-y-4 rounded-2xl border border-line bg-card p-5 lg:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-sm font-bold text-ink">Fee records</h2>
             <span className="font-mono text-sm font-semibold text-ink">Due: {formatINR(duesTotal)}</span>
@@ -77,7 +77,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
           {student.feeRecords.length === 0 ? (
             <p className="text-sm text-ink-muted">No fee records yet.</p>
           ) : (
-            <ul className="divide-y divide-[var(--color-line)]">
+            <ul className="divide-y divide-line">
               {student.feeRecords.slice(0, 8).map((f) => (
                 <li key={f.id} className="flex items-center justify-between py-2 text-sm">
                   <span className="text-ink">
@@ -95,7 +95,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+        <div className="rounded-2xl border border-line bg-card p-5">
           <h2 className="font-display text-sm font-bold text-ink">Complaints</h2>
           {student.complaints.length === 0 ? (
             <p className="mt-3 text-sm text-ink-muted">No complaints raised.</p>
@@ -110,7 +110,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
             </ul>
           )}
         </div>
-        <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+        <div className="rounded-2xl border border-line bg-card p-5">
           <h2 className="font-display text-sm font-bold text-ink">Leave history</h2>
           {student.leaves.length === 0 ? (
             <p className="mt-3 text-sm text-ink-muted">No leave applications.</p>

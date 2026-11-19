@@ -15,14 +15,14 @@ export function StatCard({
   hint?: string;
 }) {
   const toneClasses = {
-    brand: "bg-brand-50 text-brand-700",
-    success: "bg-green-50 text-success-600 dark:bg-green-950/30",
-    warning: "bg-amber-50 text-warning-600 dark:bg-amber-950/30",
-    danger: "bg-red-50 text-danger-600 dark:bg-red-950/30",
+    brand: "bg-brand-soft text-accent-fg",
+    success: "bg-success-soft text-success-fg",
+    warning: "bg-warning-soft text-warning-fg",
+    danger: "bg-danger-soft text-danger-fg",
   }[tone];
 
   return (
-    <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+    <div className="rounded-2xl border border-line bg-card p-5">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-ink-muted">{label}</p>
         <span className={cn("flex size-9 items-center justify-center rounded-lg", toneClasses)}>
@@ -45,7 +45,7 @@ export function EmptyState({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--color-line)] px-6 py-12 text-center">
+    <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-line px-6 py-12 text-center">
       <span className="flex size-11 items-center justify-center rounded-full bg-surface-muted text-ink-muted">
         <Icon className="size-5" aria-hidden="true" />
       </span>

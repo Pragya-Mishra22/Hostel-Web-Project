@@ -41,14 +41,14 @@ export function RoomPicker({ rooms }: { rooms: RoomOption[] }) {
   return (
     <div className="space-y-6">
       {error ? (
-        <div role="alert" className="flex items-center gap-2 rounded-xl border border-danger-500/30 bg-red-50 px-4 py-3 text-sm text-danger-600 dark:bg-red-950/20">
+        <div role="alert" className="flex items-center gap-2 rounded-xl border border-danger-500/30 bg-danger-soft px-4 py-3 text-sm text-danger-fg">
           <AlertCircle className="size-4 shrink-0" aria-hidden="true" /> {error}
         </div>
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {rooms.map((room) => (
-          <div key={room.roomId} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+          <div key={room.roomId} className="rounded-xl border border-line bg-card p-4">
             <div className="flex items-center justify-between">
               <p className="font-display text-sm font-bold text-ink">Room {room.roomNumber}</p>
               <span className="text-xs text-ink-muted">Floor {room.floor}</span>
@@ -66,10 +66,10 @@ export function RoomPicker({ rooms }: { rooms: RoomOption[] }) {
                     className={cn(
                       "flex min-w-[44px] min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-lg border text-xs font-medium transition-colors",
                       bed.taken
-                        ? "cursor-not-allowed border-[var(--color-line)] bg-surface-muted text-ink-muted/50"
+                        ? "cursor-not-allowed border-line bg-surface-muted text-ink-muted/50"
                         : isSelected
                           ? "border-brand-600 bg-brand-600 text-white"
-                          : "border-[var(--color-line)] text-ink hover:border-brand-500 hover:text-brand-700",
+                          : "border-line text-ink hover:border-brand-500 hover:text-accent-fg",
                     )}
                   >
                     <BedDouble className="size-4" aria-hidden="true" />
@@ -82,7 +82,7 @@ export function RoomPicker({ rooms }: { rooms: RoomOption[] }) {
         ))}
       </div>
 
-      <Button onClick={handleBook} disabled={!selectedBed || submitting} liquid size="lg">
+      <Button variant="primary" onClick={handleBook} disabled={!selectedBed || submitting} size="lg">
         {submitting ? "Booking…" : "Book selected bed"}
       </Button>
     </div>

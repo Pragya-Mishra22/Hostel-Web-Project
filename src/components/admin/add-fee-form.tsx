@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-[var(--color-line)] bg-[var(--color-surface)] px-3 text-sm text-ink outline-none focus:border-brand-500";
+  "h-10 w-full rounded-lg border border-line bg-card px-3 text-sm text-ink outline-none focus:border-brand-500";
 
 export function AddFeeForm({ students }: { students: { id: string; name: string; rollNumber: string }[] }) {
   const router = useRouter();
@@ -42,7 +42,7 @@ export function AddFeeForm({ students }: { students: { id: string; name: string;
 
   if (!open) {
     return (
-      <Button size="sm" onClick={() => setOpen(true)}>
+      <Button size="sm" variant="gold" onClick={() => setOpen(true)}>
         <Plus className="size-4" aria-hidden="true" /> Add fee record
       </Button>
     );
@@ -51,7 +51,7 @@ export function AddFeeForm({ students }: { students: { id: string; name: string;
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid gap-3 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4 sm:grid-cols-5"
+      className="grid gap-3 rounded-xl border border-line bg-card p-4 sm:grid-cols-5"
     >
       <div className="flex items-center justify-between sm:col-span-5">
         <p className="text-sm font-semibold text-ink">New fee record</p>
@@ -61,7 +61,7 @@ export function AddFeeForm({ students }: { students: { id: string; name: string;
       </div>
 
       {error ? (
-        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-red-50 px-3 py-2 text-xs text-danger-600 sm:col-span-5 dark:bg-red-950/20">
+        <div role="alert" className="flex items-center gap-2 rounded-lg border border-danger-500/30 bg-danger-soft px-3 py-2 text-xs text-danger-fg sm:col-span-5">
           <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" /> {error}
         </div>
       ) : null}
@@ -84,7 +84,7 @@ export function AddFeeForm({ students }: { students: { id: string; name: string;
       <input name="periodLabel" required placeholder="e.g. Dec 2026" className={inputClass} />
       <input name="amount" type="number" min={1} required placeholder="Amount" className={inputClass} />
 
-      <Button type="submit" size="sm" disabled={submitting} className="sm:col-span-5">
+      <Button type="submit" size="sm" variant="primary" disabled={submitting} className="sm:col-span-5">
         {submitting ? "Adding…" : "Add record"}
       </Button>
     </form>

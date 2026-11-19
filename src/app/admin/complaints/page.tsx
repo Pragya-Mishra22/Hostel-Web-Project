@@ -55,10 +55,10 @@ export default async function AdminComplaintsPage() {
       ) : (
         <ul className="space-y-3">
           {complaints.map((c) => (
-            <li key={c.id} className="rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-4">
+            <li key={c.id} className="rounded-xl border border-line bg-card p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="text-xs font-medium text-brand-600">
+                  <p className="text-xs font-medium text-accent-fg">
                     {CATEGORY_LABEL[c.category]} · {c.hostel.code}
                   </p>
                   <p className="mt-0.5 font-semibold text-ink">{c.title}</p>

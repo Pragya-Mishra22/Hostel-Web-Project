@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const roleLabel = staff.role === "CHIEF_WARDEN" ? "Chief Warden" : "Warden";
 
   return (
-    <AppShell navItems={NAV_ITEMS} userName={staff.name} roleLabel={roleLabel}>
+    <AppShell area="admin" navItems={NAV_ITEMS} userName={staff.name} roleLabel={roleLabel}>
       {children}
     </AppShell>
   );
